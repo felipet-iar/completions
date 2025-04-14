@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Copyright (c) 2020-2025 IAR Systems AB
+# See LICENSE for detailed license information
+# 
+# Bash autocompletion for `lightlicensemanager` 
+#
+
+_lightlicensemanager()
+{
+  local cur prev words cword split
+  _init_completion -s -n : || return
+
+  local opts="--debug --help --quiet --verbose"
+  local prod_bx="{arm{,f{85,92,95}},riscv,rvfs{14,31,33},rl78,rlfs51,rx,avr,rh{850,850fs,fs}}bx.ew"
+
+  if ((cword == 1)); then
+    COMPREPLY=( $(compgen -W "activate checkout checkin get_diagnostics \
+                              init nw{lics,usrs} products renew deactivate \
+                              setup" -- "${cur}") )
+  else
+    case ${prev} in
+      setup)
+        COMPREPLY=( $(compgen -W "${opts[@]} --host --package --no-deploy" -- "${cur}") )
+        return;;
+      renew)
+        opts+=("all")
+        COMPREPLY=( $(compgen -W "${opts[@]} ${prod_bx}" -- "${cur}") )
+        return;;
+      checkout)
+        opts+=("--days")
+        COMPREPLY=( $(compgen -W "${opts[@]} ${prod_bx}" -- "${cur}") )
+        return;;
+      --host)
+        _known_hosts_real -4 -- "${cur}"
+        return;;
+      --package)
+        COMPREPLY=( $(compgen -W "${opts[@]} ${prod_bx}" -- "${cur}") )
+        return;;
+    esac
+    case ${cur} in
+      -*)
+        COMPREPLY=( $(compgen -W "$opts" -- "${cur}") )
+        [[ ${COMPREPLY-} == *= ]] && compopt -o nospace
+        return;;
+    esac
+  fi
+}
+complete -F _lightlicensemanager lightlicensemanager
+

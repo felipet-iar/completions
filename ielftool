@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Copyright (c) 2020-2025 IAR Systems AB
+# See LICENSE for detailed license information
+# 
+# Bash autocompletion for `ielftool` 
+#
+
+_ielftool()
+{
+  local cur prev words cword split 
+
+  _init_completion -s -n : || return
+
+#  ${split} && return
+
+  case ${cur} in
+    -*)
+      COMPREPLY=( $(compgen -W '$(_parse_help "$1")' -- "${cur}") )
+      [[ ${COMPREPLY-} == *= ]] && compopt -o nospace
+      ;;
+  esac
+}
+complete -F _ielftool ielftool
+
