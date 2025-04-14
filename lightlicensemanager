@@ -12,7 +12,7 @@ _lightlicensemanager()
   _init_completion -s -n : || return
 
   local opts="--debug --help --quiet --verbose"
-  local prod_bx="{arm{,f{85,92,95}},riscv,rvfs{14,31,33},rl78,rlfs51,rx,avr,rh{850,850fs,fs}}bx.ew"
+  local prod_bx="{arm{,f{85,92,95}},riscv,rvfs{14,31,33},rl78,rlfs51,rx,avr,rh{850,fs22}}bx.ew"
 
   if ((cword == 1)); then
     COMPREPLY=( $(compgen -W "activate checkout checkin get_diagnostics \
